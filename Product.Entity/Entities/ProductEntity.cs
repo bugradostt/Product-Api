@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace Product.Entity.Entities
 {
     public class ProductEntity
     {
+        [Key]
         public long ProductStatusId { get; set; }
         public string ProductStatusName { get; set; } = string.Empty;
         public string ProductUrl { get; set; } = string.Empty;

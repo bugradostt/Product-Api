@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Product.DataAccess.Dtos.Response;
 
 namespace Product.Api.Controllers
 {
