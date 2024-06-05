@@ -8,5 +8,11 @@ namespace Product.DataAccess.Dtos.Product
 {
     public class AddProductDto
     {
+        public string Title { get; set; } = string.Empty; // Başlık
+        public string Sku { get; set; } = string.Empty; // Stok Kodu
+        public string TitleDomestic { get; set; } = string.Empty; // Yerel Başlık
+        public bool HasVideo { get; set; } // Video Var mı
+        public int Stock { get; set; } // Stok
+        public string CurrencyName { get; set; } = string.Empty; // Para Birimi Adı
     }
 }
