@@ -1,5 +1,4 @@
 # Product-Api 
----
 
 Bu proje, ASP.NET Core 6, Entity Framework Core, MSSQL, AutoMapper, Encrypt ve Decrypt teknolojilerini kullanarak geliştirilmiştir.
 
