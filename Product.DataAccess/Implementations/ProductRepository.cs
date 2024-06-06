@@ -7,8 +7,10 @@ using Product.DataAccess.Extensions;
 using Product.DataAccess.Interfaces;
 using Product.Entity.Entities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +34,13 @@ namespace Product.DataAccess.Implementations
             try
             {
                 var productMapper = _mapper.Map<ProductEntity>(product);
-                //productMapper.ProductStatusName = StringExtensions.Encrypt(product);
+                productMapper.ProductStatusName = StringExtensions.Encrypt(product.ProductStatusName);
+                productMapper.ProductUrl = StringExtensions.Encrypt(product.ProductUrl );
+                productMapper.Title = StringExtensions.Encrypt(product.Title );
+                productMapper.Sku = StringExtensions.Encrypt(product.Sku );
+                productMapper.TitleDomestic = StringExtensions.Encrypt(product.TitleDomestic);
+                productMapper.CurrencyName = StringExtensions.Encrypt(product.CurrencyName );
+
                 _context.Products.Add(productMapper);
                 await _context.SaveChangesAsync();
                 return ResponseDto<NoDataDto>.Success(200);
@@ -57,7 +65,12 @@ namespace Product.DataAccess.Implementations
                 .Where(x => x.ProductStatusId == productStatusId)
                 .FirstOrDefaultAsync();
 
-                _context.Remove(foundProduct.ProductStatusId);
+                if (foundProduct == null)
+                {
+                    return ResponseDto<NoDataDto>.Fail("Product not found!", 404, true);
+                }
+
+                _context.Remove(foundProduct);
                 await _context.SaveChangesAsync();
 
                 return ResponseDto<NoDataDto>.Success(200);
@@ -82,10 +95,14 @@ namespace Product.DataAccess.Implementations
                     return ResponseDto<GetProductDto>.Fail("Record not found.", 404, true);
                 }
 
-             
-
                 var mapperProduct = _mapper.Map<GetProductDto>(foundProduct);
 
+                mapperProduct.ProductStatusName = StringExtensions.Decrypt(mapperProduct.ProductStatusName);
+                mapperProduct.ProductUrl = StringExtensions.Decrypt(mapperProduct.ProductUrl);
+                mapperProduct.Title = StringExtensions.Decrypt(mapperProduct.Title);
+                mapperProduct.Sku = StringExtensions.Decrypt(mapperProduct.Sku);
+                mapperProduct.TitleDomestic = StringExtensions.Decrypt(mapperProduct.TitleDomestic);
+                mapperProduct.CurrencyName = StringExtensions.Decrypt(mapperProduct.CurrencyName);
 
                 return ResponseDto<GetProductDto>.Success(mapperProduct, 200);
 
@@ -107,13 +124,17 @@ namespace Product.DataAccess.Implementations
 
                 var mapperProductList = _mapper.Map<List<GetProductDto>>(productList);
 
-
                 foreach (var i in mapperProductList)
                 {
-
-                    //i. = StringExtensions.Decrypt(i.Name);
+                    i.ProductStatusName = StringExtensions.Decrypt(i.ProductStatusName);
+                    i.ProductUrl = StringExtensions.Decrypt(i.ProductUrl);
+                    i.Title = StringExtensions.Decrypt(i.Title);
+                    i.Sku = StringExtensions.Decrypt(i.Sku);
+                    i.TitleDomestic = StringExtensions.Decrypt(i.TitleDomestic);
+                    i.CurrencyName = StringExtensions.Decrypt(i.CurrencyName);
 
                 }
+
                 return ResponseDto<List<GetProductDto>>.Success(mapperProductList, 200);
 
 
@@ -138,7 +159,22 @@ namespace Product.DataAccess.Implementations
                     return ResponseDto<NoDataDto>.Fail("Record not found.", 404, true);
                 }
 
-                //foundProduct.Name = StringExtensions.Encrypt(product.Name);
+                foundProduct.ProductStatusName = StringExtensions.Encrypt(product.ProductStatusName);
+                foundProduct.ProductUrl = StringExtensions.Encrypt(product.ProductUrl);
+                foundProduct.Title = StringExtensions.Encrypt(product.Title);
+                foundProduct.Sku = StringExtensions.Encrypt(product.Sku);
+                foundProduct.TitleDomestic = StringExtensions.Encrypt(product.TitleDomestic);
+                foundProduct.HasVideo = product.HasVideo;
+                foundProduct.Stock = product.Stock;
+                foundProduct.CurrencyName = StringExtensions.Encrypt(product.CurrencyName);
+                foundProduct.Price = product.Price;
+                foundProduct.PriceDiscountedDomestic = product.PriceDiscountedDomestic;
+                foundProduct.PriceDiscounted = product.PriceDiscounted;
+                foundProduct.IsFeatured = product.IsFeatured;
+                foundProduct.IsElonkyFeatured = product.IsElonkyFeatured;
+                foundProduct.HasPersonalization = product.HasPersonalization;
+                foundProduct.IsTaxable = product.IsTaxable;
+                foundProduct.IsDigital = product.IsDigital;
 
 
                 _context.Products.Update(foundProduct);
